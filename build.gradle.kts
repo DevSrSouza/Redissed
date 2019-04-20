@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "br.com.devsrsouza"
-version = "0.1.0"
+version = "0.1.1"
 
 repositories {
     mavenCentral()
@@ -41,8 +41,8 @@ publishing {
                 url.set("https://github.com/DevSrSouza/Redissed")
                 licenses {
                     license {
-                        name.set("MIT License")
-                        url.set("https://github.com/DevSrSouza/Redissed/blob/master/LICENSE")
+                        name.set("Apache License, Version 2.0")
+                        url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
                         distribution.set("repo")
                     }
                 }
