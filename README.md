@@ -1,5 +1,23 @@
 # Redissed
-Redis Kotlin wrapper using Jedis based on Exposed
+Redis Kotlin wrapper using Jedis inspired on Exposed
+
+## Getting started
+
+### Gradle
+```kotlin
+dependencies {
+    compile("br.com.devsrsouza:redissed:0.1.1")
+}
+```
+
+### Maven
+```xml
+<dependency>
+    <groupId>br.com.devsrsouza</groupId>
+    <artifactId>redissed</artifactId>
+    <version>0.1.1</version>
+</dependency>
+```
 
 ## Sample
 ```kotlin
