@@ -3,6 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     kotlin("jvm") version "1.3.30"
     `maven-publish`
+    id("com.jfrog.bintray") version "1.8.4"
 }
 
 group = "br.com.devsrsouza"
@@ -19,6 +20,38 @@ dependencies {
 
 tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"
+}
+
+bintray {
+    val settings = file("publish.json").takeIf { it.exists() }?.let {
+        groovy.json.JsonSlurper().parseText(it.readText())
+    } as Map<*,*>
+
+    user = settings["bintray_user"] as String
+    key = settings["bintray_key"] as String
+    setPublications("maven")
+    with(pkg) {
+        repo = "maven"
+        name = "Redissed"
+        websiteUrl = "https://github.com/DevSrSouza/Redissed"
+        vcsUrl = "https://github.com/DevSrSouza/Redissed.git"
+        setLicenses("Apache-2.0")
+
+        with(version) {
+            name = project.version.toString()
+
+            with(gpg) {
+                sign = settings["gpg_sign"] as Boolean
+                passphrase = settings["gpg_passphrase"] as String
+            }
+
+            with(mavenCentralSync) {
+                sync = settings["maven_sync"] as Boolean
+                user = settings["maven_user"] as String
+                password = settings["maven_password"] as String
+            }
+        }
+    }
 }
 
 val sources by tasks.registering(Jar::class) {
