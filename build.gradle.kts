@@ -60,6 +60,12 @@ val sources by tasks.registering(Jar::class) {
     from(sourceSets.main.get().allSource)
 }
 
+val javadocJar by tasks.registering(Jar::class) {
+    baseName = project.name
+    classifier = "javadoc"
+    from(tasks.javadoc)
+}
+
 publishing {
     publications {
         create<MavenPublication>("maven") {
@@ -67,6 +73,7 @@ publishing {
 
             from(components["java"])
             artifact(sources.get())
+            artifact(javadocJar.get())
 
             pom {
                 name.set("Redissed")
