@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "br.com.devsrsouza"
-version = "0.1.1"
+version = "1.0.0"
 
 repositories {
     mavenCentral()
@@ -15,11 +15,21 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
-    implementation("redis.clients:jedis:3.0.1")
+
+    //clients
+    compileClasspath("redis.clients:jedis:3.0.1")
+    compileClasspath("io.lettuce:lettuce-core:5.1.6.RELEASE")
+
+    // test
+    testImplementation("org.junit.jupiter:junit-jupiter:5.4.2")
 }
 
 tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"
+}
+
+tasks.withType<Test> {
+    useJUnitPlatform()
 }
 
 bintray {
@@ -77,7 +87,7 @@ publishing {
 
             pom {
                 name.set("Redissed")
-                description.set("Redis Kotlin wrapper using Jedis inspired on Exposed")
+                description.set("Redis Kotlin wrapper inspired on Exposed")
                 url.set("https://github.com/DevSrSouza/Redissed")
                 licenses {
                     license {

@@ -1,5 +1,5 @@
 # Redissed
-Redis Kotlin wrapper using Jedis inspired on Exposed
+Redis Kotlin wrapper inspired on Exposed
 
 ## Getting started
 
@@ -23,23 +23,23 @@ dependencies {
 ```kotlin
 import br.com.devsrsouza.redissed.RedisObject
 
-class MyObject(database: String, jedis: Jedis) : RedisObject(database, jedis) {
+class MyObject(database: String, commands: RedissedCommands) : RedisObject(database, commands) {
   var hello: String? by string()
   var hi: String by string("Hi")
   
-  val other: OtherObject by obj { OtherObject(it, jedis) }
+  val other: OtherObject by obj { OtherObject(it, commands) }
 }
 
-class OtherObject(database: String, jedis: Jedis) : RedisObject(database, jedis) {
+class OtherObject(database: String, commands: RedissedCommands) : RedisObject(database, commands) {
   var something = string()
   
   var points: Int = int(0)
 }
 
 val database = "my:db"
-val jedis = myJedisInstance
+val commands: RedissedCommands = myClient.redissed
 
-val my = MyObject("$database:obj", jedis)
+val my = MyObject("$database:obj", commands)
 
 my.hello = "Hello" // setting "Hello" to my:db:obj:hello
 my.hi // getting my:db:obj:hi from Redis if not exist return default "Hi"
@@ -48,6 +48,33 @@ my.hello = null // removing data from my:db:obj:hello
 
 my.other.something = "Anything" // setting "Anything" to my:db:obj:other:something
 my.other.points = 10 // setting 10 to my:db:obj:other:points
+```
+
+## Supported Redis Clients
+- Jedis
+- Lettuce
+
+### Jedis
+```kotlin
+import br.com.devsrsouza.redissed.clients.redissed
+import br.com.devsrsouza.redissed.RedissedCommands
+
+val jedis = Jedis("localhost", 6379)
+jedis.connect()
+
+val commands: RedissedCommands = jedis.redissed
+```
+
+### Lettuce
+```kotlin
+import br.com.devsrsouza.redissed.clients.redissed
+import br.com.devsrsouza.redissed.RedissedCommands
+
+val redis = RedisClient.create(RedisURI.create("localhost", 6379))
+val conn = redis.connect()
+val sync = conn.sync()
+
+val commands: RedissedCommands = sync.redissed
 ```
 
 ## Supported types
