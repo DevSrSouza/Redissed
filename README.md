@@ -6,7 +6,7 @@ Redis Kotlin wrapper inspired on Exposed
 ### Gradle
 ```kotlin
 dependencies {
-    compile("br.com.devsrsouza:redissed:0.1.1")
+    compile("br.com.devsrsouza:redissed:1.0.0")
 }
 ```
 
@@ -15,7 +15,7 @@ dependencies {
 <dependency>
     <groupId>br.com.devsrsouza</groupId>
     <artifactId>redissed</artifactId>
-    <version>0.1.1</version>
+    <version>1.0.0</version>
 </dependency>
 ```
 
