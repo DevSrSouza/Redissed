@@ -1,9 +1,11 @@
-# Redissed
+# ![.](logo.png) Redissed
+
 Redis Kotlin wrapper inspired on Exposed
 
 ## Getting started
 
 ### Gradle
+
 ```kotlin
 dependencies {
     compile("br.com.devsrsouza:redissed:1.0.0")
@@ -11,6 +13,7 @@ dependencies {
 ```
 
 ### Maven
+
 ```xml
 <dependency>
     <groupId>br.com.devsrsouza</groupId>
@@ -20,19 +23,20 @@ dependencies {
 ```
 
 ## Sample
+
 ```kotlin
 import br.com.devsrsouza.redissed.RedisObject
 
 class MyObject(database: String, commands: RedissedCommands) : RedisObject(database, commands) {
   var hello: String? by string()
   var hi: String by string("Hi")
-  
+
   val other: OtherObject by obj { OtherObject(it, commands) }
 }
 
 class OtherObject(database: String, commands: RedissedCommands) : RedisObject(database, commands) {
   var something = string()
-  
+
   var points: Int = int(0)
 }
 
@@ -51,10 +55,12 @@ my.other.points = 10 // setting 10 to my:db:obj:other:points
 ```
 
 ## Supported Redis Clients
+
 - Jedis
 - Lettuce
 
 ### Jedis
+
 ```kotlin
 import br.com.devsrsouza.redissed.clients.redissed
 import br.com.devsrsouza.redissed.RedissedCommands
@@ -66,6 +72,7 @@ val commands: RedissedCommands = jedis.redissed
 ```
 
 ### Lettuce
+
 ```kotlin
 import br.com.devsrsouza.redissed.clients.redissed
 import br.com.devsrsouza.redissed.RedissedCommands
@@ -78,6 +85,7 @@ val commands: RedissedCommands = sync.redissed
 ```
 
 ## Supported types
+
 ```kotlin
 string(): String?
 string(default: String): String
