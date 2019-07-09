@@ -1,13 +1,13 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.3.30"
+    kotlin("jvm") version "1.3.41"
     `maven-publish`
     id("com.jfrog.bintray") version "1.8.4"
 }
 
 group = "br.com.devsrsouza"
-version = "1.0.0"
+version = "1.1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
