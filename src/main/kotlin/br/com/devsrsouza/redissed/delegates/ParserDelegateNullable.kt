@@ -6,12 +6,15 @@ import br.com.devsrsouza.redissed.setNullable
 import br.com.devsrsouza.redissed.parsers.Parser
 import kotlin.reflect.KProperty
 
-class ParserDelegateNullable<T>(val parser: Parser<T>) {
-    operator fun getValue(ref: RedisObject, property: KProperty<*>): T? {
+class ParserDelegateNullable<T>(
+    val parser: Parser<T>
+) : RedissedDelegateNullable<T> {
+
+    override operator fun getValue(ref: RedisObject, property: KProperty<*>): T? {
         return get(ref, property)?.let { parser.parse(it) }
     }
 
-    operator fun setValue(ref: RedisObject, property: KProperty<*>, value: T?) {
+    override operator fun setValue(ref: RedisObject, property: KProperty<*>, value: T?) {
         val render = value?.let { parser.render(it) }
         setNullable(render, ref, property)
     }

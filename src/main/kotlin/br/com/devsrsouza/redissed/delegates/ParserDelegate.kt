@@ -6,11 +6,16 @@ import br.com.devsrsouza.redissed.set
 import br.com.devsrsouza.redissed.parsers.Parser
 import kotlin.reflect.KProperty
 
-class ParserDelegate<T>(val parser: Parser<T>, val default: T) {
-    operator fun getValue(ref: RedisObject, property: KProperty<*>): T {
+class ParserDelegate<T>(
+    val parser: Parser<T>,
+    val default: T
+) : RedissedDelegate<T> {
+
+    override operator fun getValue(ref: RedisObject, property: KProperty<*>): T {
         return get(ref, property)?.let { parser.parse(it) } ?: default
     }
-    operator fun setValue(ref: RedisObject, property: KProperty<*>, value: T) {
+
+    override operator fun setValue(ref: RedisObject, property: KProperty<*>, value: T) {
         set(parser.render(value), ref, property)
     }
 }
