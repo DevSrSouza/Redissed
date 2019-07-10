@@ -1,8 +1,6 @@
 package br.com.devsrsouza.redissed
 
-import br.com.devsrsouza.redissed.delegates.ParserDelegate
-import br.com.devsrsouza.redissed.delegates.ParserDelegateNullable
-import br.com.devsrsouza.redissed.delegates.RedisObjectDelegate
+import br.com.devsrsouza.redissed.delegates.*
 import br.com.devsrsouza.redissed.parsers.*
 
 abstract class RedisObject(val key: String, val commands: RedissedCommands) {
@@ -34,5 +32,8 @@ abstract class RedisObject(val key: String, val commands: RedissedCommands) {
     fun double(default: Double) = parser(DoubleParser, default)
 
     fun <T : RedisObject> obj(factory: (String) -> T) = RedisObjectDelegate(factory)
+
+    fun <T> RedissedDelegate<T>.expire(seconds: Int) = RedissedExpireDelegate(seconds, this)
+    fun <T> RedissedDelegateNullable<T>.expire(seconds: Int) = RedissedExpireDelegateNullable(seconds, this)
 }
 
