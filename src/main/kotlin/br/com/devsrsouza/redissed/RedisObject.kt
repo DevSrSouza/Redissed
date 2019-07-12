@@ -35,5 +35,8 @@ abstract class RedisObject(val key: String, val commands: RedissedCommands) {
 
     fun <T> RedissedDelegate<T>.expire(seconds: Int) = RedissedExpireDelegate(seconds, this)
     fun <T> RedissedDelegateNullable<T>.expire(seconds: Int) = RedissedExpireDelegateNullable(seconds, this)
+
+    fun <T> RedissedDelegate<T>.withExpire() = RedissedDelegateWithExpire(this)
+    fun <T> RedissedDelegateNullable<T>.withExpire() = RedissedDelegateNullableWithExpire(this)
 }
 
