@@ -1,18 +1,31 @@
 package br.com.devsrsouza.redissed.test
 
 import br.com.devsrsouza.redissed.RedisObject
+import br.com.devsrsouza.redissed.clients.JedisRedissedCommands
+import br.com.devsrsouza.redissed.clients.redissed
+import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.Test
+import redis.clients.jedis.Jedis
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class RedissedTest {
+
+    lateinit var jedisCommands: JedisRedissedCommands
+
+    @BeforeAll
+    fun connectRedisWithJedis() {
+        val jedis = Jedis("localhost")
+        jedis.connect()
+
+        jedisCommands = jedis.redissed
+    }
 
     @Test
     fun `Should set in redis`() {
-        val redis = TestRedissedCommands()
+        val key = "my:key:to_set"
+        val value = "test set value"
 
-        val key = "my:key"
-        val value = "test value"
-        val redisObject = object : RedisObject(key, redis) {
+        val redisObject = object : RedisObject(key, jedisCommands) {
             var test by string()
         }
 
@@ -25,11 +38,10 @@ class RedissedTest {
 
     @Test
     fun `Should delete from redis`() {
-        val redis = TestRedissedCommands()
+        val key = "my:key:to_delete"
+        val value = "test delete value"
 
-        val key = "my:key"
-        val value = "test value"
-        val redisObject = object : RedisObject(key, redis) {
+        val redisObject = object : RedisObject(key, jedisCommands) {
             var test by string()
         }
 
@@ -46,11 +58,10 @@ class RedissedTest {
 
     @Test
     fun `Should have default value = 5`() {
-        val redis = TestRedissedCommands()
-
-        val key = "my:key"
+        val key = "my:key:default"
         val newValue = 250
-        val redisObject = object : RedisObject(key, redis) {
+
+        val redisObject = object : RedisObject(key, jedisCommands) {
             var points by int(5)
         }
 
