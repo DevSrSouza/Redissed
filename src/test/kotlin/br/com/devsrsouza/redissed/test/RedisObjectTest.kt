@@ -89,4 +89,72 @@ class RedisObjectTest {
         assertEquals(redisObject.points, newValue)
     }
 
+    @Test
+    fun `Should have expire time of 5 seconds`() {
+        val commands = mockk<RedissedCommands>()
+
+        every { commands.set("my:key:expire:points", "500") } answers { nothing }
+        every { commands.expire("my:key:expire:points", 5) } answers { true }
+
+        val key = "my:key:expire"
+        val newValue = 500
+
+        val redisObject = object : RedisObject(key, commands) {
+            var points by int().withExpire()
+        }
+
+        redisObject.points = newValue to 5
+
+        verify { commands.set("my:key:expire:points", "500") }
+        verify { commands.expire("my:key:expire:points", 5) }
+        every { commands.get("my:key:expire:points") } returns "500" to 5
+        every { commands.ttl("my:key:expire:points") } answers { 5 }
+
+        val points = redisObject.points
+        assertNotNull(points)
+        assertEquals(points!!.first, newValue)
+        assertEquals(points!!.second, 5)
+    }
+
+    @Test
+    fun `Should have expire time of -2 because the key was never set`() {
+        val commands = mockk<RedissedCommands>()
+
+        every { commands.get("my:key:expire:points") } returns null
+        every { commands.ttl("my:key:expire:points") } returns -2
+        every { commands.expire("my:key:expire:points", 5) } answers { true }
+
+        val key = "my:key:expire"
+
+        val redisObject = object : RedisObject(key, commands) {
+            var points by int(350).withExpire()
+        }
+
+        val (points1, time1) = redisObject.points
+        assertEquals(points1, 350)
+        assertEquals(time1, -2)
+    }
+
+    @Test
+    fun `Should set the key with expire time of 10 seconds`() {
+        val commands = mockk<RedissedCommands>()
+
+        every { commands.get("my:key:expire:points") } returns null
+        every { commands.ttl("my:key:expire:points") } returns -2
+        every { commands.set("my:key:expire:points", "150") } answers { nothing }
+        every { commands.expire("my:key:expire:points", 10) } answers { true }
+
+        val key = "my:key:expire"
+        val newValue = 150
+
+        val redisObject = object : RedisObject(key, commands) {
+            var points by int().expire(10)
+        }
+
+        redisObject.points = newValue
+
+        verify { commands.set("my:key:expire:points", "150") }
+        verify { commands.expire("my:key:expire:points", 10) }
+    }
+
 }
