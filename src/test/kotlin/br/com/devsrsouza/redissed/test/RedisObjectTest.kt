@@ -15,7 +15,7 @@ class RedisObjectTest {
     fun `Should set in redis`() {
 
         val commands = mockk<RedissedCommands>()
-        every { commands.set("my:key:to_set:test", "test set value") } answers { nothing }
+        every { commands.set(any(), any()) } answers { nothing }
         every { commands.get("my:key:to_set:test") } returns null
 
         val key = "my:key:to_set"
@@ -35,7 +35,7 @@ class RedisObjectTest {
     @Test
     fun `Should delete from redis`() {
         val commands = mockk<RedissedCommands>()
-        every { commands.set("my:key:to_delete:test", "test delete value") } answers { nothing }
+        every { commands.set(any(), any()) } answers { nothing }
         every { commands.get("my:key:to_delete:test") } returns null
 
         val key = "my:key:to_delete"
@@ -70,7 +70,7 @@ class RedisObjectTest {
         val commands = mockk<RedissedCommands>()
 
         every { commands.get("my:key:default:points") } returns null
-        every { commands.set("my:key:default:points", "250") } answers { nothing }
+        every { commands.set(any(), any()) } answers { nothing }
 
         val key = "my:key:default"
         val newValue = 250
@@ -93,7 +93,7 @@ class RedisObjectTest {
     fun `Should have expire time of 5 seconds`() {
         val commands = mockk<RedissedCommands>()
 
-        every { commands.set("my:key:expire:points", "500") } answers { nothing }
+        every { commands.set(any(), any()) } answers { nothing }
         every { commands.expire("my:key:expire:points", 5) } answers { true }
 
         val key = "my:key:expire"
@@ -139,9 +139,7 @@ class RedisObjectTest {
     fun `Should set the key with expire time of 10 seconds`() {
         val commands = mockk<RedissedCommands>()
 
-        every { commands.get("my:key:expire:points") } returns null
-        every { commands.ttl("my:key:expire:points") } returns -2
-        every { commands.set("my:key:expire:points", "150") } answers { nothing }
+        every { commands.set(any(), any()) } answers { nothing }
         every { commands.expire("my:key:expire:points", 10) } answers { true }
 
         val key = "my:key:expire"
