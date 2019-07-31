@@ -22,8 +22,7 @@ dependencies {
 
     // test
     testImplementation("org.junit.jupiter:junit-jupiter:5.4.2")
-    testImplementation("redis.clients:jedis:3.0.1")
-    testImplementation("io.lettuce:lettuce-core:5.1.6.RELEASE")
+    testImplementation("io.mockk:mockk:1.9")
 }
 
 tasks.withType<KotlinCompile> {
