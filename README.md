@@ -8,7 +8,7 @@ Redis Kotlin wrapper inspired on Exposed
 
 ```kotlin
 dependencies {
-    compile("br.com.devsrsouza:redissed:1.0.0")
+    compile("br.com.devsrsouza:redissed:1.1.0")
 }
 ```
 
@@ -18,7 +18,7 @@ dependencies {
 <dependency>
     <groupId>br.com.devsrsouza</groupId>
     <artifactId>redissed</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
 </dependency>
 ```
 
@@ -100,4 +100,24 @@ long(default: Long): Long
 boolean(): Boolean?
 boolean(default: Boolean): Boolean
 obj(factory: (key: String) -> RedisObject): RedisObject
+```
+
+### Expire
+Auto expires a key
+
+```kotlin
+var your_key: String? by string().expire(5) // in seconds
+```
+
+You can use ``withExpire`` to tell the expiration time for a specific value or get the expiration time of a value
+```kotlin
+var my_key: Pair<String, Int> by string("my default key").withExpire()
+
+my_key = "my new value expiring in 10 sec" to 10
+
+// get the expiration time of a key
+val (value, time) = my_key
+// returns the expiration time in seconds or
+// returns -2 if the key does not exist.
+// returns -1 if the key exists but has no associated expire. 
 ```
