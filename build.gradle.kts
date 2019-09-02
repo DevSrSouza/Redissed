@@ -33,33 +33,35 @@ tasks.withType<Test> {
     useJUnitPlatform()
 }
 
-bintray {
-    val settings = file("publish.json").takeIf { it.exists() }?.let {
-        groovy.json.JsonSlurper().parseText(it.readText())
-    } as Map<*,*>
+val settings = file("publish.json").takeIf { it.exists() }?.let {
+    groovy.json.JsonSlurper().parseText(it.readText())
+} as Map<*,*>?
 
-    user = settings["bintray_user"] as String
-    key = settings["bintray_key"] as String
-    setPublications("maven")
-    with(pkg) {
-        repo = "maven"
-        name = "Redissed"
-        websiteUrl = "https://github.com/DevSrSouza/Redissed"
-        vcsUrl = "https://github.com/DevSrSouza/Redissed.git"
-        setLicenses("Apache-2.0")
+if(settings != null) {
+    bintray {
+        user = settings["bintray_user"] as String
+        key = settings["bintray_key"] as String
+        setPublications("maven")
+        with(pkg) {
+            repo = "maven"
+            name = "Redissed"
+            websiteUrl = "https://github.com/DevSrSouza/Redissed"
+            vcsUrl = "https://github.com/DevSrSouza/Redissed.git"
+            setLicenses("Apache-2.0")
 
-        with(version) {
-            name = project.version.toString()
+            with(version) {
+                name = project.version.toString()
 
-            with(gpg) {
-                sign = settings["gpg_sign"] as Boolean
-                passphrase = settings["gpg_passphrase"] as String
-            }
+                with(gpg) {
+                    sign = settings["gpg_sign"] as Boolean
+                    passphrase = settings["gpg_passphrase"] as String
+                }
 
-            with(mavenCentralSync) {
-                sync = settings["maven_sync"] as Boolean
-                user = settings["maven_user"] as String
-                password = settings["maven_password"] as String
+                with(mavenCentralSync) {
+                    sync = settings["maven_sync"] as Boolean
+                    user = settings["maven_user"] as String
+                    password = settings["maven_password"] as String
+                }
             }
         }
     }
